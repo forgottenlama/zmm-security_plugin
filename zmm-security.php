@@ -204,7 +204,7 @@ function export_grid_to_pdf() {
     $pdf->SetFont('NotoSans-Regular', '', 16);
     $pdf->Cell(0, 10, 'Grid karta pre www.zmm.sk', 0, 1, 'C');
     $pdf->Cell(0, 10, '-----------------------------------', 0, 1, 'C');
-    $pdf->Cell(0, 10, cp1250($grid_id), 0, 1, 'C');
+    $pdf->Cell(0, 10, cp1250($grid_key), 0, 1, 'C');
     $pdf->Ln(5);
 
     $cols = 6;
@@ -312,16 +312,21 @@ function grid_auth_verify_shortcode() {
         $user = verify_grid_card($user_input_1, $user_input_2, $coord_1, $coord_2);
 
         if ($user) {
-            // Uložíme cookie že užívateľ bol overený
+            // Pomocou JS uložíme cookie že užívateľ bol overený
             // cookie prežije 1 hodinu
+            // zároveň sa vytvorí stránka o úspešnom prihlásení + možnosť odhlásiť sa
+            // je tu zábrana proti znovu odoslaniu formulára (obnovenie stránky)
             return "
             <script>
-            function nastavCookie(name, value, duration) {
-                var dnes = new Date();
-                dnes.setFullYear(dnes.getFullYear() + 1);
-                document.cookie = name + '=' + value + '; expires=' + new Date(Date.now() + 3600 * 1000).toUTCString() + '; path=/';
+            function nastavCookie(name, value, durationSeconds) {
+                var expires = '';
+                if (durationSeconds) {
+                    var date = new Date(Date.now() + durationSeconds * 1000);
+                    expires = '; expires=' + date.toUTCString();
+                }
+                document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/';
             }
-            nastavCookie('zmm-user', '{$user}', '3600');
+            nastavCookie('zmm-user', '{$user}', 3600);
             location.reload();
 
             if (window.history.replaceState) {
@@ -342,10 +347,12 @@ function grid_auth_verify_shortcode() {
             </script>
             ";
         } else {
+            // V prípade neúspešného prihlásenia
             $output .= "<p style='color: red; font-weight: bold;'>Chyba! Údaje neboli správne. Skúste to znovu.</p>";
         }
     }
 
+//logika overenia
     // Získaj náhodné dve polia z Grid karty (len pre zobrazenie)
     $upload_dir = plugin_dir_path(__FILE__) . 'grid-cards/';
     $files = glob($upload_dir . "grid-*.json");
@@ -361,16 +368,16 @@ function grid_auth_verify_shortcode() {
         $random_field_1 = $grid["{$random_row_1}_{$random_col_1}"];
         $random_field_2 = $grid["{$random_row_2}_{$random_col_2}"];
 
-        // Formátovanie výstupu pre zobrazenie
-        //style='display: none;'
+// Prihlašovací formulár
+        // for debbuging:                 
+            // <p style='display: none;'><strong>1. súradnice: {$random_row_1}_{$random_col_1} - Hodnota: {$random_field_1}</strong></p>
+            // <p style='display: none;'><strong>2. súradnice: {$random_row_2}_{$random_col_2} - Hodnota: {$random_field_2}</strong></p>
         $output .= "
             <div style='max-width: 400px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;'>
                 <h2>Zadajte hodnoty pre tieto políčka z Grid karty</h2>
-                <p style='display: none;'><strong>1. súradnice: {$random_row_1}_{$random_col_1} - Hodnota: {$random_field_1}</strong></p>
-                <p style='display: none;'><strong>2. súradnice: {$random_row_2}_{$random_col_2} - Hodnota: {$random_field_2}</strong></p>
+
                 <form method='POST' style='display: flex; flex-direction: column; gap: 15px;'>
                     <div>
-                        <label for='coord_1' style='font-weight: bold; display: none;'>Súradnice 1: </label>
                         <input type='text' name='coord_1' value='{$random_row_1}_{$random_col_1}' readonly required style='width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; display: none;' />
                     </div>
                     <div>
@@ -378,7 +385,6 @@ function grid_auth_verify_shortcode() {
                         <input type='text' name='grid_input_1' required style='width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;' />
                     </div>
                     <div>
-                        <label for='coord_2' style='font-weight: bold; display: none;'>Súradnice 2: </label>
                         <input type='text' name='coord_2' value='{$random_row_2}_{$random_col_2}' readonly required style='width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; display: none;' />
                     </div>
                     <div>
@@ -393,7 +399,7 @@ function grid_auth_verify_shortcode() {
                     window.history.replaceState(null, null, window.location.href);
                 }
             </script>
-        ";
+        "; // zábrana znovu odoslania formulára pri obnovení stránky
     } else {
         $output .= "<p>Žiadna Grid karta nie je k dispozícii.</p>";
     }
@@ -408,6 +414,8 @@ add_shortcode('grid_auth_verify', 'grid_auth_verify_shortcode');
 function protected_page_shortcode() {
     // Skontrolujeme, či existuje cookie s overeným užívateľom
     if (!isset($_COOKIE['zmm-user'])) {
+        // Adresa stránky s prihlasovaním je hardcoded - zmeniť podľa potreby
+        // Ak cookie neexistuje, presmerujeme na prihlasovaciu stránku, timeout 1 sekunda
         return "
         <script>
             location.reload();
@@ -417,7 +425,7 @@ function protected_page_shortcode() {
             }, 1000);
         </script>";
     }
-    //  //localhost/wordpress/test-prihlasenie
+
 
     return ""; // Ak je používateľ overený, stránka sa normálne zobrazí
 }
