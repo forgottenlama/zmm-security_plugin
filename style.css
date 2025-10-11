@@ -1,0 +1,203 @@
+/* Základné nastavenia pre admin rozhranie */
+.wrap {
+    max-width: 100%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Formulár pre generovanie Grid kariet */
+input[type="text"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Štýly tlačidiel */
+button, .button {
+    background: #0073aa;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1rem;
+}
+
+button:hover, .button:hover {
+    background: #005177;
+}
+
+/* Tabuľka pre zobrazenie Grid kariet */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #f9f9f9;
+    table-layout: fixed;
+}
+/* Hlavička tabuľky */
+#table-head{
+    background: #0073aa;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+#table-cell {
+    border: 1px solid #ddd;
+    font-family: arial;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 10% 0 0 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+
+/* Grid tabuľka */
+
+#grid-cell {
+    overflow-x: auto;
+    border: 1px solid #ddd;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    min-width: 310px;
+    overflow-x: auto;
+}
+
+.grid-item {
+    background-color: #f0f0f0;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#button-cell {
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    padding: 15% 20% 24% 20%;
+}
+/* Štýl pre odstránenie tlačidla */
+.delete-grid {
+    background: #d9534f;
+    border: none;
+    padding: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    margin: 5% 0 5% 0;
+    font-size: 1.1rem;
+}
+
+.delete-grid:hover {
+    background: #c9302c;
+}
+
+.export-grid {
+    background: #3b9c3b;
+    border: none;
+    padding: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    margin: 5% 0 5% 0;
+    font-size: 1.1rem;
+}
+
+.export-grid:hover {
+    background: #156e15;
+}
+
+/* Responzívne nastavenia */
+
+/* Pre zariadenia s šírkou menšou než 1024px */
+@media screen and (max-width: 1024px) {
+    table th, table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+    .wrap {
+        padding: 15px;
+    }
+}
+
+/* Pre zariadenia s šírkou menšou než 768px (mobilné zariadenia) */
+@media screen and (max-width: 768px) {
+    table th, table td {
+        font-size: 12px;
+        padding: 6px;
+    }
+    .grid-item {
+        font-size: 14px;
+        padding: 10px;
+    }
+    .wrap {
+        padding: 10px;
+    }
+    input[type="text"] {
+        padding: 8px;
+        font-size: 14px;
+    }
+    button, .button {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+/* Pre zariadenia s šírkou menšou než 480px (veľmi malé obrazovky) */
+@media screen and (max-width: 480px) {
+    table th, table td {
+        font-size: 10px;
+        padding: 5px;
+    }
+    .grid-item {
+        font-size: 12px;
+        padding: 8px;
+    }
+    .wrap {
+        padding: 5px;
+    }
+    input[type="text"] {
+        font-size: 12px;
+        padding: 6px;
+    }
+    button, .button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+/* Pre veľmi malé obrazovky (napr. telefóny v režime na výšku) */
+@media screen and (max-width: 360px) {
+    .wrap {
+        padding: 10px;
+    }
+}
