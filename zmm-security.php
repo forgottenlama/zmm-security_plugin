@@ -122,7 +122,7 @@ function grid_auth_list_page() {
         echo '<p>Žiadne karty neboli vygenerované.</p>';
     } else {
         echo '<table class="wp-list-table widefat fixed striped">';
-        echo '<thead><tr><th id="table-head">Kľúč</th><th id="table-head">Grid</th><th id="table-head">Akcie</th></tr></thead><tbody>';
+        echo '<thead><tr><th id="table-head">Kľúč</th><th id="table-head">Grid Karta</th><th id="table-head">Funkcie</th></tr></thead><tbody>';
         
         foreach ($files as $file) { //pre každú kartu
             $key = basename($file, ".json");
@@ -193,7 +193,7 @@ function export_grid_to_pdf() {
     if (!$grid_data) {
         wp_die('Nepodarilo sa načítať grid kartu.');
     }
-    error_log("data loaded"); // fordebugging
+    error_log("data loaded"); // for debugging
 
     // Načítanie knižnice FPDF (umiestnená v priečinku pluginu)
     require_once plugin_dir_path(__FILE__) . 'fpdf/fpdf.php';
@@ -368,8 +368,8 @@ function grid_auth_verify_shortcode() {
         $random_field_1 = $grid["{$random_row_1}_{$random_col_1}"];
         $random_field_2 = $grid["{$random_row_2}_{$random_col_2}"];
 
-// Prihlašovací formulár
-        // for debbuging:                 
+// Prihlasovací formulár
+        // for debugging:                 
             // <p style='display: none;'><strong>1. súradnice: {$random_row_1}_{$random_col_1} - Hodnota: {$random_field_1}</strong></p>
             // <p style='display: none;'><strong>2. súradnice: {$random_row_2}_{$random_col_2} - Hodnota: {$random_field_2}</strong></p>
         $output .= "
