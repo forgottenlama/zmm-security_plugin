@@ -4,6 +4,8 @@ Je to plugin určený pre stránku `www.zmm.sk`. Jeho hlavnou úlohou je umožni
 ## Používateľská dokumentácia
 *Programátorskú dokumentáciu nájdete v súbore* `DOCUMENTATION.md`
 
+Celý zdrojový kód aj s dokumentáciou sa nachádza vo [verejnom repozitári na GitHub-e](https://github.com/forgottenlama/zmm-security_plugin)
+
 Po nainštalovaní *(je možné pomocou zip súboru)* a aktivovaní *(v správcovi pluginov WordPressu)* sa v ovládacom paneli WordPressu zobrazí záložka `Grid Karty`.
 V tejto záložke sa nachádzajú 2 podstránky: `Grid Karty` a `Vygenerované Karty`
 
